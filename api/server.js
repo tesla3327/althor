@@ -2,6 +2,10 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+// Import models
+const Prospect = require('./models/Prospect');
 
 // Define constants
 const PORT = 5000;
@@ -66,17 +70,30 @@ app.get('/hello', (req, res) => {
  */
 app.post('/prospect', (req, res) => {
   const prospect = req.body.prospect;
-  console.log('Adding new prospect to the database:');
-  console.log( prospect );
 
-  res.sendStatus(200);
+  // Create a new Prospect obj
+  const newProspect = new Prospect({
+    hostname: prospect.hostname,
+  });
+
+  // Save to the db
+  newProspect.save()
+    .then( savedObj => {
+      console.log('Successfully added new Prospect to the database');
+      res.sendStatus(200);
+    })
+    .catch( err => {
+      console.error('Error saving object to db.');
+      console.error(err);
+    });
 });
 
 /**
  * Return a list of prospects from the database
  */
 app.get('/prospects', (req, res) => {
-  res.send(PROSPECT_STUB);
+  Prospect.find()
+    .then( data => res.send(data) );
 });
 
 /**
@@ -85,12 +102,15 @@ app.get('/prospects', (req, res) => {
 app.get('/hostCrawled/:host', (req, res) => {
   const hostname = req.params.host;
 
-  if (hostname === 'www.somewebsite.com' ||
-      hostname === 'www.anotherwebsite.com') {
-    res.send({ hostname, crawled: true });
-  } else {
-    res.send({ hostname, crawled: false });
-  }
+  Prospect.find({ hostname })
+    .then( result => {
+      console.log(result);
+      if (result.length > 0) {
+        res.send({ crawled: true });
+      } else {
+        res.send({ crawled: false });
+      }
+    });
 });
 
 /**
@@ -110,8 +130,18 @@ app.get('/emails', (req, res) => {
 /**
  * Server configuration
  */
-app.listen(PORT, () => {
-  console.log(`API started on port ${PORT}.`);
+mongoose.connect('mongodb://localhost/althor');
+mongoose.Promise = global.Promise;
+const db = mongoose.connection;
+db.on('error', (err) => console.error(err) );
+
+// Start the server once we have connected to the db
+db.once('open', () => {
+  console.log('Database connection established.');
+
+  app.listen(PORT, () => {
+    console.log(`API started on port ${PORT}.`);
+  });
 });
 
 
