@@ -70,11 +70,10 @@ app.get('/hello', (req, res) => {
  */
 app.post('/prospect', (req, res) => {
   const prospect = req.body.prospect;
+  console.log(prospect);
 
   // Create a new Prospect obj
-  const newProspect = new Prospect({
-    hostname: prospect.hostname,
-  });
+  const newProspect = new Prospect(prospect);
 
   // Save to the db
   newProspect.save()
@@ -104,7 +103,6 @@ app.get('/hostCrawled/:host', (req, res) => {
 
   Prospect.find({ hostname })
     .then( result => {
-      console.log(result);
       if (result.length > 0) {
         res.send({ crawled: true });
       } else {

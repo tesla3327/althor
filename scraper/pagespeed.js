@@ -21,9 +21,6 @@ const fetchInsight = (url, strategy = 'mobile', screenshot = false) => {
         data.screenshot.path = imgPath;
       }
 
-      // Indicate progress
-      console.log('.');
-
       return {
         insights: data,
         screenshotPath: imgPath
