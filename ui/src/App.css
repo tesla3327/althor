@@ -1,0 +1,13 @@
+img.screenshot {
+  height: 350px;
+  width: auto;
+  margin: 10px;
+}
+
+.insights {
+  margin: 10px;
+}
+
+.insights span {
+  margin-right: 10px;
+}

@@ -3,9 +3,11 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require('path');
 
 // Import models
 const Prospect = require('./models/Prospect');
+const SCREENSHOT_PATH = '../scraper/images/';
 
 // Define constants
 const PORT = 5000;
@@ -124,6 +126,21 @@ app.post('/email', (req, res) => {
 app.get('/emails', (req, res) => {
   res.send('Return list of emails');
 });
+
+const getScreenshot = (isMobile, host, res) => {
+  const filePath = `${SCREENSHOT_PATH}${host}.${isMobile ? 'mobile' : 'desktop'}.jpg`;
+  res.sendFile(path.resolve(__dirname, filePath));
+};
+
+/**
+ * Get mobile screenshot
+ */
+app.get('/screenshot/mobile/:host', (req, res) => getScreenshot(true, req.params.host, res) );
+
+/**
+ * Get desktop screenshot
+ */
+app.get('/screenshot/desktop/:host', (req, res) => getScreenshot(false, req.params.host, res) );
 
 /**
  * Server configuration
