@@ -1,0 +1,34 @@
+html,
+body * {
+  font-size: 18px;
+}
+
+img.screenshot {
+  height: 350px;
+  width: auto;
+  margin: 10px;
+}
+
+.insights {
+  margin: 10px;
+}
+
+.insights span {
+  margin-right: 10px;
+}
+
+button {
+  padding: 10px;
+  background: white;
+  border: solid 1px currentcolor;
+  margin: 10px;
+  cursor: pointer;
+}
+
+button.qualify {
+  color: #30b245;
+}
+
+button.reject {
+  color: #ff3f3f;
+}

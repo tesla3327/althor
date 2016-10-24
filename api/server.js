@@ -51,6 +51,14 @@ const PROSPECT_STUB = [
 app.use( bodyParser.json() );
 app.use( morgan('dev') );
 
+// CORS support
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 // Test to make sure API is up and running
 app.get('/hello', (req, res) => {
   res.send('Hello there!');
@@ -89,12 +97,39 @@ app.post('/prospect', (req, res) => {
     });
 });
 
+app.get('/prospect/:hostname', (req, res) => {
+  Prospect.find({ hostname: req.params.hostname })
+    .then( data => res.send(data) )
+    .catch( console.error );
+});
+
+app.patch('/prospect/:hostname', (req, res) => {
+  const prospectHost = req.params.hostname;
+
+  console.log(req.body);
+
+  Prospect.update({ hostname: prospectHost }, req.body, null, (err, docs) => {
+    if (err) {
+      console.error(err);
+      res.sendStatus(500);
+    } else {
+      console.log(docs);
+      console.log(`Updated documents.`);
+      res.sendStatus(200);
+    }
+  })
+});
+
 /**
  * Return a list of prospects from the database
  */
 app.get('/prospects', (req, res) => {
   Prospect.find()
-    .then( data => res.send(data) );
+    .then( data => {
+      console.log(`Sending ${data.length} prospects.`);
+      res.send(data);
+    })
+    .catch( console.error );
 });
 
 /**

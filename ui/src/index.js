@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import Prospects from './Prospects';
 import './index.css';
 
+const api = 'http://localhost:5000';
+
 ReactDOM.render(
-  <App />,
+  <Prospects api={api} />,
   document.getElementById('root')
 );

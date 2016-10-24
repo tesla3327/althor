@@ -1,0 +1,15 @@
+.text-box label {
+  margin-right: 10px;
+}
+
+.text-box input {
+  width: 200px;
+}
+
+.template-values {
+  padding: 10px;
+}
+
+.text-box {
+  padding-bottom: 10px;
+}
