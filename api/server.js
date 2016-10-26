@@ -11,42 +11,6 @@ const SCREENSHOT_PATH = '../scraper/images/';
 
 // Define constants
 const PORT = 5000;
-const PROSPECT_STUB = [
-  {
-    hostname: 'www.somewebsite.com',
-    insights: {
-      mobile: {
-        speed: 89,
-        usability: 90,
-      },
-      desktop: {
-        speed: 95,
-        usability: 93,
-      },
-    },
-    screenshots: {
-      mobile: 'screens/www.somewebsite.com.mobile.jpg',
-      desktop: 'screens/www.somewebsite.com.desktop.jpg',
-    }
-  },
-  {
-    hostname: 'www.anotherwebsite.com',
-    insights: {
-      mobile: {
-        speed: 45,
-        usability: 69,
-      },
-      desktop: {
-        speed: 87,
-        usability: 85,
-      },
-    },
-    screenshots: {
-      mobile: 'screens/www.anotherwebsite.com.mobile.jpg',
-      desktop: 'screens/www.anotherwebsite.com.desktop.jpg',
-    }
-  }
-];
 
 app.use( bodyParser.json() );
 app.use( morgan('dev') );
@@ -121,10 +85,13 @@ app.patch('/prospect/:hostname', (req, res) => {
 });
 
 /**
- * Return a list of prospects from the database
+ * Return a list of prospects from the database.
+ *
+ * Sorted first by mobile usability, and then mobile speed (from worst to best)
  */
 app.get('/prospects', (req, res) => {
-  Prospect.find()
+  Prospect.find({ qualified: { $exists: false } })
+    .sort('mobile.insights.ruleGroups.USABILITY.score mobile.insights.ruleGroups.SPEED.score')
     .then( data => {
       console.log(`Sending ${data.length} prospects.`);
       res.send(data);

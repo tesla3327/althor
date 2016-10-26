@@ -138,15 +138,24 @@ class ViewProspect extends Component {
 
     return (
       <div>
-        <div className="screenshots">
-          <Screenshot
-            host={ this.props.hostname }
-            api={ this.props.api }
-          />
-          <Screenshot
-            host={ this.props.hostname }
-            api={ this.props.api }
-            mobile
+        <div className="upper-view">
+          <div className="screenshots">
+            <Screenshot
+              host={ this.props.hostname }
+              api={ this.props.api }
+              mobile
+            />
+            <Screenshot
+              host={ this.props.hostname }
+              api={ this.props.api }
+            />
+          </div>
+          <Insights
+            mobile={{
+              speed: this.props.mobileInsights.ruleGroups.SPEED.score,
+              usability: this.props.mobileInsights.ruleGroups.USABILITY.score,
+            }}
+            desktop={{ speed: this.props.desktopInsights.ruleGroups.SPEED.score }}
           />
         </div>
         <TemplateValues callbacks={ callbacks } values={ this.state }/>

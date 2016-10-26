@@ -25,6 +25,11 @@ class TemplateValues extends Component {
       <div className="template-values">
         <h3>Template Values</h3>
         <TextBox
+          field="Company Name"
+          handleChange={ handleCompanyName }
+          value={ values.companyName }
+        />
+        <TextBox
           field="First Name"
           handleChange={ handleFirstName }
           value={ values.contactName.first }
@@ -33,11 +38,6 @@ class TemplateValues extends Component {
           field="Last Name"
           handleChange={ handleLastName }
           value={ values.contactName.last }
-        />
-        <TextBox
-          field="Company Name"
-          handleChange={ handleCompanyName }
-          value={ values.companyName }
         />
         <TextBox
           field="Email"

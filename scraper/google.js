@@ -33,7 +33,7 @@ const addHostName = (result) => {
 
 const getSearchResults = (terms) => {
   const searchTerms = terms.split(/\s+/).join('+');
-  const searchUrl = `http://www.google.com/search?q=${searchTerms}`;
+  const searchUrl = `http://www.google.com/search?q=${searchTerms}&num=50`;
   return scrapeIt( searchUrl, parse )
     .then( results => results.results )
     .then( results => results.filter( result => result.title ) )

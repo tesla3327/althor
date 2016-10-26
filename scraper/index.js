@@ -24,6 +24,7 @@ const filterCrawled = (result) => {
     .then( crawled => {
       // We don't want to crawl this host again
       if (crawled) {
+        console.log(`${result.hostname} has already been crawled.`);
         return;
       } else {
         processResult(result);
@@ -46,7 +47,10 @@ const postProspect = (prospect) => {
 const processResult = (result) => {
   mapPageSpeedResult(result)
     .then( logResult )
-    .then( postProspect );
+    .then( postProspect )
+    .then( () => {
+      console.log(`Successfully stored ${result.hostname}`);
+    });
 };
 
 /**
@@ -59,7 +63,13 @@ const prospectCrawled = (result) => {
 };
 
 // Kick it all off
-getSearchResults('lawyer cambridge')
+const searchTerm = process.argv[2];
+console.log(`Searching for: ${searchTerm}`);
+getSearchResults(searchTerm)
+  .then( results => {
+    console.log(`Received ${results.length} search results.\n`, results);
+    return results;
+  })
   .then( results => results.forEach( filterCrawled ) );
 
 

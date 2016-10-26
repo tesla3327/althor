@@ -11,8 +11,8 @@ class Prospects extends Component {
 
     fetch(`${props.api}/prospects`)
       .then( data => data.json() )
-      .then( json => {
-        const prospects = json;
+      .then( data => data.reverse() )
+      .then( prospects => {
         const currentProspect = prospects.pop();
 
         console.log(prospects);
@@ -30,6 +30,8 @@ class Prospects extends Component {
     const prospects = this.state.prospects;
     const currentProspect = prospects.pop();
 
+    console.log(currentProspect);
+
     this.setState({
       prospects,
       currentProspect,
@@ -42,6 +44,8 @@ class Prospects extends Component {
         <ViewProspect
           api={ this.props.api }
           hostname={ this.state.currentProspect.hostname }
+          mobileInsights={ this.state.currentProspect.mobile.insights }
+          desktopInsights={ this.state.currentProspect.desktop.insights }
           nextProspect={ this.nextProspect.bind(this) }
         />
       );
